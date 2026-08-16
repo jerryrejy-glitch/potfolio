@@ -101,6 +101,8 @@ export default function Work() {
                 src={p.img}
                 alt={p.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 50vw"
+                quality={85}
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               />
 
@@ -143,8 +145,10 @@ export default function Work() {
                   <Image
                     src={p.src}
                     alt={`${p.handle} Instagram page`}
-                    width={640}
-                    height={1319}
+                    width={320}
+                    height={660}
+                    sizes="230px"
+                    quality={80}
                     className="w-full h-auto"
                     style={{ filter: "drop-shadow(0 24px 32px rgba(0,0,0,0.18)) drop-shadow(0 4px 10px rgba(0,0,0,0.10))" }}
                   />

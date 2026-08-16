@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -44,6 +45,72 @@ const skillsList = [
 ];
 
 export default function Hero() {
+  const playPopSound = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+
+      // Web Audio Synthesized Pop (Instant 0ms latency)
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.07);
+
+      // Layered with MP3 sample
+      const sound = new Audio("/assets/bubble.mp3");
+      sound.volume = 0.35;
+      sound.play().catch(() => {});
+    } catch {
+      // Audio fallback
+    }
+  };
+
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+
+    // Schedule pop sound for EACH social icon as it appears
+    socialIcons.forEach((ic) => {
+      const t = setTimeout(() => {
+        playPopSound();
+      }, ic.delay * 1000);
+      timers.push(t);
+    });
+
+    // Interaction listeners to unlock audio context on browser policies
+    const unlockAudio = () => {
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("scroll", unlockAudio);
+    };
+
+    window.addEventListener("pointerdown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true });
+    window.addEventListener("scroll", unlockAudio, { once: true });
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("scroll", unlockAudio);
+    };
+  }, []);
+
   return (
     <section
       id="hero"
@@ -91,7 +158,9 @@ export default function Hero() {
               initial={{ opacity: 0, x: ic.from.x, y: ic.from.y, scale: 0.3, rotate: 0 }}
               animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: ic.rotate }}
               transition={{ duration: 1.1, ease, delay: ic.delay }}
-              className={`absolute hidden md:block ${ic.front ? "z-20" : "z-[1]"}`}
+              onMouseEnter={playPopSound}
+              onClick={playPopSound}
+              className={`absolute hidden md:block cursor-pointer transition-transform duration-200 hover:scale-110 ${ic.front ? "z-20" : "z-[1]"}`}
               style={{ ...ic.pos, width: ic.size }}
             >
               <motion.div
@@ -101,8 +170,10 @@ export default function Hero() {
                 <Image
                   src={ic.src}
                   alt={ic.alt}
-                  width={200}
-                  height={200}
+                  width={160}
+                  height={160}
+                  sizes="100px"
+                  quality={85}
                   className="w-full h-auto"
                 />
               </motion.div>
@@ -114,6 +185,8 @@ export default function Hero() {
             width={1080}
             height={1444}
             priority
+            sizes="(max-width: 768px) 78vw, (max-width: 1200px) 380px, 430px"
+            quality={90}
             className="relative z-10 w-full h-auto"
           />
         </motion.div>
