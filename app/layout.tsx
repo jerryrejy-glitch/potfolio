@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Jerry V Rejy — Social Media Manager",
+  title: "Jerry V Rejy — Social Media Manager in Dubai",
   description:
     "Social Media Manager with 8+ years growing brands organically. 400K+ followers, ₹1Cr+ revenue, currently at Provident Real Estate, Dubai.",
 };

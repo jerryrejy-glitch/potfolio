@@ -14,7 +14,7 @@ export default function Nav() {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-12 h-16 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-12 h-14 md:h-16 transition-all duration-300"
       style={{
         background: scrolled ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.85)",
         backdropFilter: "saturate(180%) blur(20px)",
@@ -22,7 +22,7 @@ export default function Nav() {
         borderBottom: "1px solid rgba(0,0,0,0.06)",
       }}
     >
-      <a href="#" className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">
+      <a href="#" className="text-[16px] md:text-[17px] font-semibold tracking-tight text-[#1D1D1F]">
         Jerry V Rejy
       </a>
 
@@ -41,7 +41,7 @@ export default function Nav() {
 
       <a
         href="mailto:jerryrejy@gmail.com"
-        className="bg-[#1D1D1F] text-white px-[22px] py-[10px] rounded-full text-[14px] font-medium hover:opacity-80 transition-opacity duration-200"
+        className="bg-[#1D1D1F] text-white px-4 py-2 text-[13px] md:px-[22px] md:py-[10px] md:text-[14px] rounded-full font-medium hover:opacity-80 transition-opacity duration-200"
       >
         Let's Talk
       </a>
